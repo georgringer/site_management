@@ -1,8 +1,11 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
+
 namespace GeorgRinger\SiteManagement\Controller;
 
 
+use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
+use GeorgRinger\SiteManagement\SiteCreation\SiteCreationHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Configuration\SiteTcaConfiguration;
@@ -84,25 +87,31 @@ class SiteManagementController
      * List pages that have 'is_siteroot' flag set - those that have the globe icon in page tree.
      * Link to Add / Edit / Delete for each.
      */
-    protected function overviewAction(): void
+    protected function overviewAction(ServerRequestInterface $request): void
     {
-        $this->configureOverViewDocHeader();
-        $allSites = $this->siteFinder->getAllSites();
-        $pages = $this->getAllSitePages();
-        $unassignedSites = [];
-        foreach ($allSites as $identifier => $site) {
-            $rootPageId = $site->getRootPageId();
-            if (isset($pages[$rootPageId])) {
-                $pages[$rootPageId]['siteIdentifier'] = $identifier;
-                $pages[$rootPageId]['siteConfiguration'] = $site;
-            } else {
-                $unassignedSites[] = $site;
-            }
-        }
-        $this->view->assignMultiple([
-            'pages' => $pages,
-            'unassignedSites' => $unassignedSites
-        ]);
+//        $this->view->assignMultiple([
+//            'pages' => $pages,
+//            'unassignedSites' => $unassignedSites
+//        ]);
+    }
+
+    protected function createAction(ServerRequestInterface $request)
+    {
+        $configuration = $this->createConfigurationFromRequest($request);
+
+        $siteCreation = GeneralUtility::makeInstance(SiteCreationHandler::class, $configuration);
+        $siteCreation->handle();
+    }
+
+    protected function createConfigurationFromRequest(ServerRequestInterface $request): Configuration
+    {
+        $configuration = GeneralUtility::makeInstance(Configuration::class);
+
+        $vars = $request->getParsedBody();
+        $configuration->setIdentifier($vars['identifier']);
+        $configuration->setSourceRootPageId((int)$vars['base']);
+
+        return $configuration;
     }
 
     /**
@@ -535,9 +544,9 @@ class SiteManagementController
     {
         $this->view = GeneralUtility::makeInstance(StandaloneView::class);
         $this->view->setTemplate($templateName);
-        $this->view->setTemplateRootPaths(['EXT:backend/Resources/Private/Templates/SiteConfiguration']);
-        $this->view->setPartialRootPaths(['EXT:backend/Resources/Private/Partials']);
-        $this->view->setLayoutRootPaths(['EXT:backend/Resources/Private/Layouts']);
+        $this->view->setTemplateRootPaths(['EXT:site_management/Resources/Private/Templates/']);
+        $this->view->setPartialRootPaths(['EXT:site_management/Resources/Private/Partials']);
+        $this->view->setLayoutRootPaths(['EXT:site_management/Resources/Private/Layouts']);
     }
 
     /**
