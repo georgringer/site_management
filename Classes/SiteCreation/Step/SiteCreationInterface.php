@@ -13,6 +13,6 @@ interface SiteCreationInterface
     public function isValid(): bool;
 
 
-    public function handle(): void;
+    public function handle(Configuration $configuration): void;
 
 }

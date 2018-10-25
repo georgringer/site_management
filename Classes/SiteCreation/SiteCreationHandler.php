@@ -5,6 +5,8 @@ namespace GeorgRinger\SiteManagement\SiteCreation;
 
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
 use GeorgRinger\SiteManagement\SiteCreation\Step\CopyPageTree;
+use GeorgRinger\SiteManagement\SiteCreation\Step\CreateSiteConfiguration;
+use GeorgRinger\SiteManagement\SiteCreation\Step\SendMail;
 use GeorgRinger\SiteManagement\SiteCreation\Step\SiteCreationInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -15,7 +17,9 @@ class SiteCreationHandler
     protected $configuration;
 
     protected static $handlers = [
-        CopyPageTree::class
+        CopyPageTree::class,
+        CreateSiteConfiguration::class,
+        SendMail::class
     ];
 
     /**
@@ -30,15 +34,16 @@ class SiteCreationHandler
 
     public function handle()
     {
+        $configuration = $this->configuration;
 
         foreach (self::$handlers as $class) {
             /** @var SiteCreationInterface $step */
-            $step = GeneralUtility::makeInstance($class, $this->configuration);
+            $step = GeneralUtility::makeInstance($class);
             if ($step->isValid()) {
-                $step->handle();
+                $step->handle($configuration);
             }
         }
-        print_r($this->configuration);
+        print_r($configuration);
         die('xxx');
     }
 
