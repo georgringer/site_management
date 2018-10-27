@@ -6,6 +6,7 @@ namespace GeorgRinger\SiteManagement\Controller;
 
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
 use GeorgRinger\SiteManagement\Domain\Repository\SiteManagementRepository;
+use GeorgRinger\SiteManagement\Exception\SiteConfigurationException;
 use GeorgRinger\SiteManagement\SiteCreation\SiteCreationHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -49,6 +50,9 @@ class SiteManagementController
      */
     protected $siteFinder;
 
+    /** @var SiteManagementRepository */
+    protected $siteManagementRepository;
+
     /**
      * Default constructor
      */
@@ -56,6 +60,7 @@ class SiteManagementController
     {
         $this->siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
         $this->moduleTemplate = GeneralUtility::makeInstance(ModuleTemplate::class);
+        $this->siteManagementRepository = GeneralUtility::makeInstance(SiteManagementRepository::class);
     }
 
     /**
@@ -84,8 +89,7 @@ class SiteManagementController
      */
     protected function overviewAction(ServerRequestInterface $request): void
     {
-        $siteManagementRepository = GeneralUtility::makeInstance(SiteManagementRepository::class);
-        $demoSites = $siteManagementRepository->getDemoSiteRows();
+        $demoSites = $this->siteManagementRepository->getDemoSiteRows();
 
         $this->view->assignMultiple([
             'demoSites' => $demoSites,
@@ -95,8 +99,7 @@ class SiteManagementController
     protected function demoSiteSelectionAction(ServerRequestInterface $request): void
     {
         $selectedDemoSite = $request->getQueryParams()['site'];
-        $siteManagementRepository = GeneralUtility::makeInstance(SiteManagementRepository::class);
-        $demoSites = $siteManagementRepository->getDemoSiteRows();
+        $demoSites = $this->siteManagementRepository->getDemoSiteRows();
         $demoSite = $demoSites[$selectedDemoSite];
         if ($demoSite) {
             $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
@@ -111,8 +114,48 @@ class SiteManagementController
     {
         $configuration = $this->createConfigurationFromRequest($request);
 
+        try {
+            $this->validateConfiguration($configuration);
+        } catch (SiteConfigurationException $e) {
+            $flashMessage = GeneralUtility::makeInstance(FlashMessage::class, $e->getMessage(), '', FlashMessage::ERROR, true);
+
+            $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
+            $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();
+            $defaultFlashMessageQueue->enqueue($flashMessage);
+
+            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+            $redirectUrl = (string)$uriBuilder->buildUriFromRoute('site_management', [
+                'action' => 'demoSiteSelection',
+                'site' => $configuration->getSourceRootPageId()
+            ]);
+            return new RedirectResponse($redirectUrl);
+        }
+
         $siteCreation = GeneralUtility::makeInstance(SiteCreationHandler::class, $configuration);
         $siteCreation->handle();
+    }
+
+    /**
+     * @param Configuration $configuration
+     * @throws SiteConfigurationException
+     */
+    protected function validateConfiguration(Configuration $configuration)
+    {
+
+        // site identifier not used
+        try {
+            $siteExists = $this->siteFinder->getSiteByIdentifier($configuration->getIdentifier());
+            throw new SiteConfigurationException(sprintf('Site identifier "%s" does already exist!', $configuration->getIdentifier()), 1540665355);
+        } catch (SiteNotFoundException $e) {
+            // site not found is good in that case
+        }
+
+        // source page is valid
+        if (!$this->siteManagementRepository->demoSiteExists($configuration->getSourceRootPageId())) {
+            throw new SiteConfigurationException(sprintf('Demo site with page id "%s" does not exist!', $configuration->getSourceRootPageId()), 1540665355);
+        }
+
+        throw new SiteConfigurationException('xx');
     }
 
     protected function createConfigurationFromRequest(ServerRequestInterface $request): Configuration

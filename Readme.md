@@ -6,8 +6,6 @@
 - Create be users/groups
 - Validation
     - Site
-    - new identifier
-    - ...
 - UI
 - Tests
 
