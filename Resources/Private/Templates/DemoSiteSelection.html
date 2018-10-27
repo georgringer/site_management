@@ -18,7 +18,8 @@
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" name="languages[]" value="{language.languageId}">
-                                        {language.title} [UID: {language.languageId}]
+
+                                        <core:icon identifier="{language.flagIdentifier}" /> {siteLanguage.title} {language.title} [UID: {language.languageId}]
                                     </label>
                                 </div>
                             </f:for>
