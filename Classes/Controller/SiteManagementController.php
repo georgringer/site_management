@@ -154,8 +154,6 @@ class SiteManagementController
         if (!$this->siteManagementRepository->demoSiteExists($configuration->getSourceRootPageId())) {
             throw new SiteConfigurationException(sprintf('Demo site with page id "%s" does not exist!', $configuration->getSourceRootPageId()), 1540665355);
         }
-
-        throw new SiteConfigurationException('xx');
     }
 
     protected function createConfigurationFromRequest(ServerRequestInterface $request): Configuration
@@ -166,6 +164,7 @@ class SiteManagementController
         $configuration->setIdentifier($vars['identifier']);
         $configuration->setSourceRootPageId((int)$vars['base']);
         $configuration->setLanguages((array)$vars['languages']);
+        $configuration->setDomain($vars['domain']);
 
         return $configuration;
     }

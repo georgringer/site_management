@@ -44,14 +44,26 @@ class CreateSiteConfiguration extends AbstractStep implements SiteCreationInterf
         $currentSite = $this->siteFinder->getSiteByRootPageId($configuration->getSourceRootPageId());
         $currentSiteConfiguration = $currentSite->getConfiguration();
 
-        // todo add new data
-//        $newSysSiteData = array_merge($currentSiteConfiguration, $newSysSiteData);
+        $targetConfiguration = $this->mergeConfigurationIntoSiteConfiguration($currentSiteConfiguration, $configuration);
         $newSiteConfiguration = $currentSiteConfiguration;
-        // todo see SiteConfigurationController::validateFullStructure
 
         // Persist the configuration
         $this->siteConfigurationManager->write($configuration->getIdentifier(), $newSiteConfiguration);
         $this->clearCaches();
+    }
+
+    protected function mergeConfigurationIntoSiteConfiguration(array $sourceConfiguration, Configuration $configuration)
+    {
+        $sourceConfiguration['rootPageId'] = $configuration->getTargetRootPageId();
+        $sourceConfiguration['base'] = $configuration->getDomain();
+
+        foreach ($sourceConfiguration['languages'] as $key => $language) {
+            if (!in_array($language['languageId'], $configuration->getLanguages())) {
+                unset($sourceConfiguration['languages'][$key]);
+            }
+        }
+
+        return $sourceConfiguration;
     }
 
     protected function clearCaches()

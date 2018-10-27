@@ -2,9 +2,10 @@
 
 namespace GeorgRinger\SiteManagement\Domain\Model\Dto;
 
-class Configuration {
+class Configuration
+{
 
-    /** @var int  */
+    /** @var int */
     protected $sourceRootPageId = 0;
 
     /** @var string */
@@ -15,6 +16,9 @@ class Configuration {
 
     /** @var string */
     protected $googleTagManager = '';
+
+    /** @var string domain */
+    protected $domain = '';
 
     /** @var int */
     protected $targetRootPageId = 0;
@@ -100,7 +104,20 @@ class Configuration {
         $this->targetRootPageId = $targetRootPageId;
     }
 
+    /**
+     * @return string
+     */
+    public function getDomain(): string
+    {
+        return $this->domain;
+    }
 
-
+    /**
+     * @param string $domain
+     */
+    public function setDomain(string $domain): void
+    {
+        $this->domain = $domain;
+    }
 
 }
