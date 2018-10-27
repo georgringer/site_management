@@ -21,10 +21,11 @@ class CopyPageTree extends AbstractStep implements SiteCreationInterface
 
     public function handle(Configuration $configuration): void
     {
-        $duplicateTce = GeneralUtility::makeInstance(DataHandler::class);
-        $duplicateTce->copyTree = 99;
-        $sourcePageUid = $this->configuration->getSourceRootPageId();
+        $sourcePageUid = $configuration->getSourceRootPageId();
 
+        $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
+        $dataHandler->copyTree = 99;
+        $dataHandler->admin = true;
         $duplicateCmd = [
             'pages' => [
                 $sourcePageUid => [
@@ -33,10 +34,10 @@ class CopyPageTree extends AbstractStep implements SiteCreationInterface
             ]
         ];
 
-        $duplicateTce->start([], $duplicateCmd);
-        $duplicateTce->process_cmdmap();
+        $dataHandler->start([], $duplicateCmd);
+        $dataHandler->process_cmdmap();
 
-        $duplicateMappingArray = $duplicateTce->copyMappingArray;
+        $duplicateMappingArray = $dataHandler->copyMappingArray;
         $duplicateUid = $duplicateMappingArray['pages'][$sourcePageUid];
 
         $configuration->setTargetRootPageId($duplicateUid);

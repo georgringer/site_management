@@ -1,5 +1,16 @@
 # TYPO3 Extension `site_management`
 
+## Todos
+
+- Merge site config with new one
+- Create be users/groups
+- Validation
+    - Site
+    - new identifier
+    - ...
+- UI
+- Tests
+
 ## Tests
 
 ```

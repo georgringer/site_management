@@ -1,0 +1,47 @@
+<html
+        xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+        data-namespace-typo3-fluid="true">
+<h1>Site Management</h1>
+
+<f:if condition="{demoSite}">
+    <f:then>
+        <p class="lead">Create new sites based on demo tree <strong>{demoSite.title}</strong>.</p>
+        <div class="row">
+            <div class="col-xs-8">
+                <f:form>
+                    <f:form.hidden name="action" value="create"/>
+                    <f:form.hidden name="base" value="{demoSite.uid}"/>
+                    <div class="form-group">
+                        <label >Languages</label>
+
+                            <f:for each="{siteConfiguration.languages}" as="language">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="languages[]" value="{language.languageId}">
+                                        {language.title} [UID: {language.languageId}]
+                                    </label>
+                                </div>
+                            </f:for>
+                    </div>
+                    <div class="form-group">
+                        <label for="identifier">New identifier</label>
+                        <input required name="identifier" id="identifier" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Submit"/>
+                    </div>
+
+                </f:form>
+            </div>
+            <div class="col-xs-4">
+                <h5>Some description</h5>
+                <hr>
+            </div>
+        </div>
+    </f:then>
+    <f:else>
+
+    </f:else>
+</f:if>
+
+</html>

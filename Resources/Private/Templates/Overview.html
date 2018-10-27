@@ -1,34 +1,30 @@
 <html
-		xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-		data-namespace-typo3-fluid="true">
+        xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+        data-namespace-typo3-fluid="true">
 <h1>Site Management</h1>
-<p class="lead">Create new sites based on demo trees.</p>
+<p class="lead">Create new sites based on one of the demo trees below</p>
 
-<div class="row">
-	<div class="col-xs-8">
-		<f:form>
-			<f:form.hidden name="action" value="create" />
-			<div class="form-group">
-				<label for="base">Base</label>
-				<select name="base" id="base" required class="form-control">
-					<option></option>
-					<option value="1">Demo 1</option>
-					<option value="2">Demo 2</option>
-				</select>
-			</div>
-			<div class="form-group">
-				<label for="identifier">Identifier</label>
-				<input required name="identifier" id="identifier" class="form-control"/>
-			</div>
-			<div class="form-group">
-				<input type="submit" class="btn btn-primary" value="Submit"/>
-			</div>
+<table class="table table-condensed table-hover">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <f:for each="{demoSites}" as="site">
+        <tr>
+            <td>{site.title}</td>
+            <td>{site.rowDescription -> f:format.nl2br()}</td>
+            <td>
+                <f:be.link route="site_management" parameters="{action: 'demoSiteSelection', site: site.uid}" title="Create site" class="btn btn-primary">
+                  Create
+                </f:be.link>
+            </td>
+        </tr>
+    </f:for>
+    </tbody>
+</table>
 
-		</f:form>
-	</div>
-	<div class="col-xs-4">
-		<h5>Some description</h5>
-		<hr>
-	</div>
-</div>
 </html>

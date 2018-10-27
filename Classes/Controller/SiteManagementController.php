@@ -5,6 +5,7 @@ namespace GeorgRinger\SiteManagement\Controller;
 
 
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
+use GeorgRinger\SiteManagement\Domain\Repository\SiteManagementRepository;
 use GeorgRinger\SiteManagement\SiteCreation\SiteCreationHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -83,10 +84,27 @@ class SiteManagementController
      */
     protected function overviewAction(ServerRequestInterface $request): void
     {
-//        $this->view->assignMultiple([
-//            'pages' => $pages,
-//            'unassignedSites' => $unassignedSites
-//        ]);
+        $siteManagementRepository = GeneralUtility::makeInstance(SiteManagementRepository::class);
+        $demoSites = $siteManagementRepository->getDemoSiteRows();
+
+        $this->view->assignMultiple([
+            'demoSites' => $demoSites,
+        ]);
+    }
+
+    protected function demoSiteSelectionAction(ServerRequestInterface $request): void
+    {
+        $selectedDemoSite = $request->getQueryParams()['site'];
+        $siteManagementRepository = GeneralUtility::makeInstance(SiteManagementRepository::class);
+        $demoSites = $siteManagementRepository->getDemoSiteRows();
+        $demoSite = $demoSites[$selectedDemoSite];
+        if ($demoSite) {
+            $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+            $this->view->assign('siteConfiguration', $siteFinder->getSiteByRootPageId($demoSite['uid']));
+        }
+        $this->view->assignMultiple([
+            'demoSite' => $demoSite,
+        ]);
     }
 
     protected function createAction(ServerRequestInterface $request)
@@ -104,6 +122,7 @@ class SiteManagementController
         $vars = $request->getParsedBody();
         $configuration->setIdentifier($vars['identifier']);
         $configuration->setSourceRootPageId((int)$vars['base']);
+        $configuration->setLanguages((array)$vars['languages']);
 
         return $configuration;
     }

@@ -6,6 +6,7 @@ namespace GeorgRinger\SiteManagement\SiteCreation;
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
 use GeorgRinger\SiteManagement\SiteCreation\Step\CopyPageTree;
 use GeorgRinger\SiteManagement\SiteCreation\Step\CreateSiteConfiguration;
+use GeorgRinger\SiteManagement\SiteCreation\Step\ResetRootPage;
 use GeorgRinger\SiteManagement\SiteCreation\Step\SendMail;
 use GeorgRinger\SiteManagement\SiteCreation\Step\SiteCreationInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -19,6 +20,8 @@ class SiteCreationHandler
     protected static $handlers = [
         CopyPageTree::class,
         CreateSiteConfiguration::class,
+        ResetRootPage::class,
+
         SendMail::class
     ];
 
