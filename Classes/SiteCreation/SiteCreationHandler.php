@@ -46,8 +46,6 @@ class SiteCreationHandler
                 $step->handle($configuration);
             }
         }
-        print_r($configuration);
-        die('xxx');
     }
 
 
