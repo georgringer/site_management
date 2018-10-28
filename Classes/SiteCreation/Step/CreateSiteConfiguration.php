@@ -39,16 +39,20 @@ class CreateSiteConfiguration extends AbstractStep implements SiteCreationInterf
         return true;
     }
 
+    /**
+     * @param Configuration $configuration
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     * @throws \TYPO3\CMS\Core\Exception\SiteNotFoundException
+     */
     public function handle(Configuration $configuration): void
     {
         $currentSite = $this->siteFinder->getSiteByRootPageId($configuration->getSourceRootPageId());
         $currentSiteConfiguration = $currentSite->getConfiguration();
 
         $targetConfiguration = $this->mergeConfigurationIntoSiteConfiguration($currentSiteConfiguration, $configuration);
-        $newSiteConfiguration = $currentSiteConfiguration;
 
         // Persist the configuration
-        $this->siteConfigurationManager->write($configuration->getIdentifier(), $newSiteConfiguration);
+        $this->siteConfigurationManager->write($configuration->getIdentifier(), $targetConfiguration);
         $this->clearCaches();
     }
 
@@ -58,7 +62,7 @@ class CreateSiteConfiguration extends AbstractStep implements SiteCreationInterf
         $sourceConfiguration['base'] = $configuration->getDomain();
 
         foreach ($sourceConfiguration['languages'] as $key => $language) {
-            if (!in_array($language['languageId'], $configuration->getLanguages())) {
+            if (!\in_array($language['languageId'], $configuration->getLanguages())) {
                 unset($sourceConfiguration['languages'][$key]);
             }
         }
@@ -66,6 +70,9 @@ class CreateSiteConfiguration extends AbstractStep implements SiteCreationInterf
         return $sourceConfiguration;
     }
 
+    /**
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     */
     protected function clearCaches()
     {
         $this->getCache()->remove('pseudo-sites');

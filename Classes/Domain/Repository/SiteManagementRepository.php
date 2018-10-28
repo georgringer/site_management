@@ -25,7 +25,7 @@ class SiteManagementRepository
             ->execute()
             ->fetch();
 
-        return is_array($row) && !empty($row);
+        return \is_array($row) && !empty($row);
     }
 
     public function getDemoSiteRows(): array
@@ -48,12 +48,54 @@ class SiteManagementRepository
             $row['rootline'] = BackendUtility::BEgetRootLine((int)$row['uid']);
             array_pop($row['rootline']);
             $row['rootline'] = array_reverse($row['rootline']);
-            $i = 0;
-            foreach ($row['rootline'] as &$record) {
-                $record['margin'] = $i++ * 20;
-            }
+
             $pages[(int)$row['uid']] = $row;
         }
         return $pages;
+    }
+
+    public function getUserGroupsOfDemoSite(int $pageId): array
+    {
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_groups');
+        $rows = $queryBuilder
+            ->select('*')
+            ->from('be_groups')
+            ->where(
+                $queryBuilder->expr()->eq('tx_site_management_site', $pageId)
+            )
+            ->addOrderBy('sorting')
+            ->execute()
+            ->fetchAll();
+
+        $rows = $this->setUidAsKey($rows);
+
+        return $rows;
+    }
+
+    public function getUsersOfDemoSite(int $pageId): array
+    {
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_users');
+        $rows = $queryBuilder
+            ->select('*')
+            ->from('be_users')
+            ->where(
+                $queryBuilder->expr()->eq('tx_site_management_site', $pageId)
+            )
+            ->addOrderBy('username')
+            ->execute()
+            ->fetchAll();
+
+        $rows = $this->setUidAsKey($rows);
+
+        return $rows;
+    }
+
+    protected function setUidAsKey(array $rows): array
+    {
+        $new = [];
+        foreach ($rows as $row) {
+            $new[$row['uid']] = $row;
+        }
+        return $new;
     }
 }

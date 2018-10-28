@@ -6,6 +6,7 @@ namespace GeorgRinger\SiteManagement\SiteCreation;
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
 use GeorgRinger\SiteManagement\SiteCreation\Step\CopyPageTree;
 use GeorgRinger\SiteManagement\SiteCreation\Step\CreateSiteConfiguration;
+use GeorgRinger\SiteManagement\SiteCreation\Step\CreateUsergroups;
 use GeorgRinger\SiteManagement\SiteCreation\Step\ResetRootPage;
 use GeorgRinger\SiteManagement\SiteCreation\Step\SendMail;
 use GeorgRinger\SiteManagement\SiteCreation\Step\SiteCreationInterface;
@@ -21,7 +22,7 @@ class SiteCreationHandler
         CopyPageTree::class,
         CreateSiteConfiguration::class,
         ResetRootPage::class,
-
+        CreateUsergroups::class,
         SendMail::class
     ];
 

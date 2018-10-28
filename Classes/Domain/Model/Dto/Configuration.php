@@ -23,6 +23,9 @@ class Configuration
     /** @var int */
     protected $targetRootPageId = 0;
 
+    /** @var User[] */
+    protected $users = [];
+
     /**
      * @return int
      */
@@ -118,6 +121,22 @@ class Configuration
     public function setDomain(string $domain): void
     {
         $this->domain = $domain;
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getUsers(): array
+    {
+        return $this->users;
+    }
+
+    /**
+     * @param User[] $users
+     */
+    public function setUsers(array $users): void
+    {
+        $this->users = $users;
     }
 
 }

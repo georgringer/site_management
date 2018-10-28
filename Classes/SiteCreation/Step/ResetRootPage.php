@@ -34,7 +34,8 @@ class ResetRootPage extends AbstractStep implements SiteCreationInterface
             [
                 'title' => VariableReplacer::replace($currentPageTitle, $configuration),
                 'rowDescription' => '',
-                'tx_site_management_demo_tree' => 0
+                'tx_site_management_demo_tree' => 0,
+                'hidden' => 1,
             ],
             [
                 'uid' => $configuration->getTargetRootPageId()
