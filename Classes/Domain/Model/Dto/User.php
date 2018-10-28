@@ -16,6 +16,9 @@ class User
     /** @var string */
     protected $email = '';
 
+    /** @var string */
+    protected $password = '';
+
     public function __construct(string $input)
     {
         $input = trim($input);
@@ -60,5 +63,20 @@ class User
         return $this->email;
     }
 
+    /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     */
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
 
 }

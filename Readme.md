@@ -6,6 +6,7 @@
 - Create be users/groups
 - Validation
     - Site
+    - Username does not exist
 - UI
 - Tests
 
