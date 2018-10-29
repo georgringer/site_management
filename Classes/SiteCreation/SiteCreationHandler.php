@@ -4,11 +4,7 @@ declare(strict_types=1);
 namespace GeorgRinger\SiteManagement\SiteCreation;
 
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
-use GeorgRinger\SiteManagement\SiteCreation\Step\CopyPageTree;
-use GeorgRinger\SiteManagement\SiteCreation\Step\CreateSiteConfiguration;
-use GeorgRinger\SiteManagement\SiteCreation\Step\CreateUsergroups;
-use GeorgRinger\SiteManagement\SiteCreation\Step\ResetRootPage;
-use GeorgRinger\SiteManagement\SiteCreation\Step\SendMail;
+use GeorgRinger\SiteManagement\Domain\Model\Dto\Response;
 use GeorgRinger\SiteManagement\SiteCreation\Step\SiteCreationInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -18,16 +14,7 @@ class SiteCreationHandler
     /** @var Configuration */
     protected $configuration;
 
-    protected static $handlers = [
-        CopyPageTree::class,
-        CreateSiteConfiguration::class,
-        ResetRootPage::class,
-        CreateUsergroups::class,
-        SendMail::class
-    ];
-
     /**
-     * Base constructor.
      * @param Configuration $configuration
      */
     public function __construct(Configuration $configuration)
@@ -36,18 +23,27 @@ class SiteCreationHandler
     }
 
 
-    public function handle()
+    public function handle(): Response
     {
+        $response = GeneralUtility::makeInstance(Response::class);
+
         $configuration = $this->configuration;
 
-        foreach (self::$handlers as $class) {
+        foreach ($this->getSteps() as $class => $stepConfiguration) {
             /** @var SiteCreationInterface $step */
             $step = GeneralUtility::makeInstance($class);
             if ($step->isValid()) {
-                $step->handle($configuration);
+                $options = $stepConfiguration['options'] ?? [];
+                $step->handle($configuration, $response, $options);
             }
         }
+
+        return $response;
     }
 
+    protected function getSteps(): array
+    {
+        return $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['site_management']['steps'];
+    }
 
 }

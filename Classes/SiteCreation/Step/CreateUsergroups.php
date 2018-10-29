@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace GeorgRinger\SiteManagement\SiteCreation\Step;
 
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
+use GeorgRinger\SiteManagement\Domain\Model\Dto\Response;
 use GeorgRinger\SiteManagement\Domain\Model\Dto\User;
 use GeorgRinger\SiteManagement\Utility\DuplicateCommand;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashFactory;
@@ -36,7 +37,7 @@ class CreateUsergroups extends AbstractStep implements SiteCreationInterface
         return true;
     }
 
-    public function handle(Configuration $configuration): void
+    public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
     {
         $users = $configuration->getUsers();
         if (!empty($users)) {
@@ -46,6 +47,7 @@ class CreateUsergroups extends AbstractStep implements SiteCreationInterface
                     $this->duplicateSingleUser($sourceRecordId, $user);
                 }
             }
+            $response->setUsers($users);
         }
     }
 

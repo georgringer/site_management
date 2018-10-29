@@ -20,9 +20,6 @@ class Configuration
     /** @var string domain */
     protected $domain = '';
 
-    /** @var int */
-    protected $targetRootPageId = 0;
-
     /** @var User[] */
     protected $users = [];
 
@@ -89,22 +86,6 @@ class Configuration
     public function setGoogleTagManager(string $googleTagManager): void
     {
         $this->googleTagManager = $googleTagManager;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTargetRootPageId(): int
-    {
-        return $this->targetRootPageId;
-    }
-
-    /**
-     * @param int $targetRootPageId
-     */
-    public function setTargetRootPageId(int $targetRootPageId): void
-    {
-        $this->targetRootPageId = $targetRootPageId;
     }
 
     /**

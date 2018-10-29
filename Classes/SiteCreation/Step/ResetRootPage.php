@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace GeorgRinger\SiteManagement\SiteCreation\Step;
 
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
+use GeorgRinger\SiteManagement\Domain\Model\Dto\Response;
 use GeorgRinger\SiteManagement\Utility\VariableReplacer;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -21,12 +22,12 @@ class ResetRootPage extends AbstractStep implements SiteCreationInterface
         return true;
     }
 
-    public function handle(Configuration $configuration): void
+    public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
     {
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getConnectionForTable('pages');
 
-        $originalRow = BackendUtility::getRecord('pages', $configuration->getTargetRootPageId());
+        $originalRow = BackendUtility::getRecord('pages', $response->getTargetRootPageId());
         $currentPageTitle = trim(str_replace('(copy 1)', '', $originalRow['title']));
 
         $connection->update(
@@ -38,7 +39,7 @@ class ResetRootPage extends AbstractStep implements SiteCreationInterface
                 'hidden' => 1,
             ],
             [
-                'uid' => $configuration->getTargetRootPageId()
+                'uid' => $response->getTargetRootPageId()
             ]
         );
     }

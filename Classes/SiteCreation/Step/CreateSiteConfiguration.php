@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace GeorgRinger\SiteManagement\SiteCreation\Step;
 
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
+use GeorgRinger\SiteManagement\Domain\Model\Dto\Response;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
@@ -44,21 +45,21 @@ class CreateSiteConfiguration extends AbstractStep implements SiteCreationInterf
      * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
      * @throws \TYPO3\CMS\Core\Exception\SiteNotFoundException
      */
-    public function handle(Configuration $configuration): void
+    public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
     {
         $currentSite = $this->siteFinder->getSiteByRootPageId($configuration->getSourceRootPageId());
         $currentSiteConfiguration = $currentSite->getConfiguration();
 
-        $targetConfiguration = $this->mergeConfigurationIntoSiteConfiguration($currentSiteConfiguration, $configuration);
+        $targetConfiguration = $this->mergeConfigurationIntoSiteConfiguration($currentSiteConfiguration, $response, $configuration);
 
         // Persist the configuration
         $this->siteConfigurationManager->write($configuration->getIdentifier(), $targetConfiguration);
         $this->clearCaches();
     }
 
-    protected function mergeConfigurationIntoSiteConfiguration(array $sourceConfiguration, Configuration $configuration)
+    protected function mergeConfigurationIntoSiteConfiguration(array $sourceConfiguration, Response $response, Configuration $configuration)
     {
-        $sourceConfiguration['rootPageId'] = $configuration->getTargetRootPageId();
+        $sourceConfiguration['rootPageId'] = $response->getTargetRootPageId();
         $sourceConfiguration['base'] = $configuration->getDomain();
 
         foreach ($sourceConfiguration['languages'] as $key => $language) {

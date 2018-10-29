@@ -70,16 +70,6 @@ class ConfigurationTest extends UnitTestCase
     /**
      * @test
      */
-    public function targetRootPageCanBeTest(): void
-    {
-        $value = 456;
-        $this->subject->setTargetRootPageId($value);
-        $this->assertEquals($value, $this->subject->getTargetRootPageId());
-    }
-
-    /**
-     * @test
-     */
     public function usersCanBeTest(): void
     {
         $user = new User('johnDoe');

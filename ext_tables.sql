@@ -14,3 +14,8 @@ CREATE TABLE be_groups
 (
   tx_site_management_site varchar(50) DEFAULT '' NOT NULL,
 );
+
+CREATE TABLE sys_filemounts
+(
+  tx_site_management_site varchar(50) DEFAULT '' NOT NULL,
+);

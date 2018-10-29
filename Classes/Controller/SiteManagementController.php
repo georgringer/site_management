@@ -119,7 +119,11 @@ class SiteManagementController
         }
 
         $siteCreation = GeneralUtility::makeInstance(SiteCreationHandler::class, $configuration);
-        $siteCreation->handle();
+        $response = $siteCreation->handle();
+
+        $this->view->assignMultiple([
+            'response' => $response
+        ]);
     }
 
     /**

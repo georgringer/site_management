@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace GeorgRinger\SiteManagement\SiteCreation\Step;
 
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
+use GeorgRinger\SiteManagement\Domain\Model\Dto\Response;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -19,7 +20,7 @@ class CopyPageTree extends AbstractStep implements SiteCreationInterface
         return true;
     }
 
-    public function handle(Configuration $configuration): void
+    public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
     {
         $sourcePageUid = $configuration->getSourceRootPageId();
 
@@ -40,7 +41,7 @@ class CopyPageTree extends AbstractStep implements SiteCreationInterface
         $duplicateMappingArray = $dataHandler->copyMappingArray;
         $duplicateUid = $duplicateMappingArray['pages'][$sourcePageUid];
 
-        $configuration->setTargetRootPageId($duplicateUid);
+        $response->setTargetRootPageId($duplicateUid);
     }
 
 }
