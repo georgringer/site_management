@@ -35,11 +35,6 @@ class CreateSiteConfiguration extends AbstractStep implements SiteCreationInterf
         return 'Create Site configuration';
     }
 
-    public function isValid(): bool
-    {
-        return true;
-    }
-
     /**
      * @param Configuration $configuration
      * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
@@ -47,6 +42,7 @@ class CreateSiteConfiguration extends AbstractStep implements SiteCreationInterf
      */
     public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
     {
+        return;
         $currentSite = $this->siteFinder->getSiteByRootPageId($configuration->getSourceRootPageId());
         $currentSiteConfiguration = $currentSite->getConfiguration();
 

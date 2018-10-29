@@ -15,11 +15,6 @@ class SendMail extends AbstractStep implements SiteCreationInterface
         return 'Send mail';
     }
 
-    public function isValid(): bool
-    {
-        return true;
-    }
-
     public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
     {
         $mailMessage = GeneralUtility::makeInstance(MailMessage::class);
@@ -30,6 +25,5 @@ class SendMail extends AbstractStep implements SiteCreationInterface
             ->addPart('Site has been created', 'text/plain')
             ->send();
     }
-
 
 }

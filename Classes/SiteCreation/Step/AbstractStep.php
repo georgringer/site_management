@@ -19,4 +19,9 @@ abstract class AbstractStep
 //    }
 
 
+    public function isValid(): bool
+    {
+        return true;
+    }
+
 }

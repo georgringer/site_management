@@ -8,27 +8,26 @@ use GeorgRinger\SiteManagement\Domain\Model\Dto\Response;
 use GeorgRinger\SiteManagement\Utility\DuplicateCommand;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class CopyPageTree extends AbstractStep implements SiteCreationInterface
+class CreateUserGroup extends AbstractStep implements SiteCreationInterface
 {
 
     /** @var DuplicateCommand */
-    protected $duplicateCommandService;
+    protected $duplicateCommand;
 
     public function __construct()
     {
-        $this->duplicateCommandService = GeneralUtility::makeInstance(DuplicateCommand::class);
+        $this->duplicateCommand = GeneralUtility::makeInstance(DuplicateCommand::class);
     }
 
     public function getTitle(): string
     {
-        return 'Copy page tree';
+        return 'Create usergroup';
     }
 
     public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
     {
-//        $newId = $this->duplicateCommandService->duplicate('pages', $configuration->getSourceRootPageId());
-        $newId = 56;
-        $response->setTargetRootPageId($newId);
+
     }
+
 
 }

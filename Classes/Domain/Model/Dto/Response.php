@@ -8,6 +8,9 @@ class Response
     /** @var int */
     protected $targetRootPageId = 0;
 
+    /** @var array */
+    protected $sysFileMounts = [];
+
     /** @var User[] */
     protected $users = [];
 
@@ -43,6 +46,20 @@ class Response
         $this->users = $users;
     }
 
+    /**
+     * @return array
+     */
+    public function getSysFileMounts(): array
+    {
+        return $this->sysFileMounts;
+    }
 
+    /**
+     * @param array $sysFileMounts
+     */
+    public function setSysFileMounts(array $sysFileMounts): void
+    {
+        $this->sysFileMounts = $sysFileMounts;
+    }
 
 }

@@ -12,7 +12,7 @@ use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class CreateUsergroups extends AbstractStep implements SiteCreationInterface
+class CreateUsers extends AbstractStep implements SiteCreationInterface
 {
 
     /** @var DuplicateCommand */
@@ -30,11 +30,6 @@ class CreateUsergroups extends AbstractStep implements SiteCreationInterface
     public function getTitle(): string
     {
         return 'Create users';
-    }
-
-    public function isValid(): bool
-    {
-        return true;
     }
 
     public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void

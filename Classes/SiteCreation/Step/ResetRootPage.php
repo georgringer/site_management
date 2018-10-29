@@ -17,11 +17,6 @@ class ResetRootPage extends AbstractStep implements SiteCreationInterface
         return 'Reset root page';
     }
 
-    public function isValid(): bool
-    {
-        return true;
-    }
-
     public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
     {
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)
