@@ -1,0 +1,56 @@
+{
+  "name": "georgringer/site-management",
+  "type": "typo3-cms-extension",
+  "description": "Manage multiple sites and duplicate sites including user, usergroups, filemounts, ...",
+  "keywords": [
+    "TYPO3",
+    "extension",
+    "sites"
+  ],
+  "authors": [
+    {
+      "name": "Georg Ringer",
+      "role": "Developer",
+      "homepage": "https://ringer.it"
+    }
+  ],
+  "license": [
+    "GPL-2.0-or-later"
+  ],
+  "require": {
+    "typo3/cms-core": "^9.5.0"
+  },
+  "require-dev": {
+    "typo3/testing-framework": "^4.10.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "GeorgRinger\\SiteManagement\\": "Classes"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "GeorgRinger\\SiteManagement\\Tests\\": "Tests"
+    }
+  },
+  "replace": {
+    "site_management": "self.version",
+    "typo3-ter/site_management": "self.version"
+  },
+  "config": {
+    "vendor-dir": ".Build/vendor",
+    "bin-dir": ".Build/bin"
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "mkdir -p .Build/Web/typo3conf/site_management/",
+      "[ -L .Build/Web/typo3conf/ext/site_management ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/site_management"
+    ]
+  },
+  "extra": {
+    "typo3/cms": {
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "web-dir": ".Build/Web"
+    }
+  }
+}
