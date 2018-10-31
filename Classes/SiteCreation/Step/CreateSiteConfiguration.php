@@ -42,7 +42,7 @@ class CreateSiteConfiguration extends AbstractStep implements SiteCreationInterf
      */
     public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
     {
-        return;
+//        return;
         $currentSite = $this->siteFinder->getSiteByRootPageId($configuration->getSourceRootPageId());
         $currentSiteConfiguration = $currentSite->getConfiguration();
 

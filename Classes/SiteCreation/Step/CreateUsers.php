@@ -61,7 +61,8 @@ class CreateUsers extends AbstractStep implements SiteCreationInterface
                 'email' => $user->getEmail(),
                 'realName' => $user->getName(),
                 'password' => $this->passwordHashInstance->getHashedPassword($newPassword),
-                'tx_site_management_site' => 0
+                'tx_site_management_site' => 0,
+                'tx_site_management_based_on' => $templateRecordId
             ],
             [
                 'uid' => $newId

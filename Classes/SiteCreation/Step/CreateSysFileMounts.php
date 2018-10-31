@@ -99,6 +99,7 @@ class CreateSysFileMounts extends AbstractStep implements SiteCreationInterface
                     'title' => VariableReplacer::replace($currentPageTitle, $configuration),
                     'path' => $identifier,
                     'tx_site_management_site' => 0,
+                    'tx_site_management_based_on' => $sourceId,
                 ],
                 [
                     'uid' => $targetUid

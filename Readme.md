@@ -2,9 +2,6 @@
 
 ## Todos
 
-- Merge site config with new one
-- Create be users/groups
-- create db mount/storage
 - Validation
     - Site
     - Username does not exist

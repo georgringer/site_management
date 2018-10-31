@@ -10,6 +10,14 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class SendMail extends AbstractStep implements SiteCreationInterface
 {
+    /** @var MailMessage */
+    protected $mailMessage;
+
+    public function __construct()
+    {
+        $this->mailMessage = GeneralUtility::makeInstance(MailMessage::class);
+    }
+
     public function getTitle(): string
     {
         return 'Send mail';
@@ -17,13 +25,11 @@ class SendMail extends AbstractStep implements SiteCreationInterface
 
     public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
     {
-        $mailMessage = GeneralUtility::makeInstance(MailMessage::class);
-        $mailMessage
-            ->addTo('georg.ringer@gmail.com')
-            ->addFrom('noreply@fo.com', 'Site Management')
-            ->setSubject('Site created')
-            ->addPart('Site has been created', 'text/plain')
-            ->send();
+        $this->mailMessage->addTo('georg.ringer@gmail.com');
+        $this->mailMessage->addFrom('noreply@fo.com', 'Site Management');
+        $this->mailMessage->setSubject('Site created');
+        $this->mailMessage->addPart('Site has been created', 'text/plain');
+        $this->mailMessage->send();
     }
 
 }

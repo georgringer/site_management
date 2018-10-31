@@ -11,8 +11,11 @@ class Response
     /** @var array */
     protected $sysFileMounts = [];
 
-    /** @var User[] */
+    /** @var array */
     protected $users = [];
+
+    /** @var array */
+    protected $usergroups = [];
 
     /**
      * @return int
@@ -61,5 +64,22 @@ class Response
     {
         $this->sysFileMounts = $sysFileMounts;
     }
+
+    /**
+     * @return array
+     */
+    public function getUsergroups(): array
+    {
+        return $this->usergroups;
+    }
+
+    /**
+     * @param array $usergroups
+     */
+    public function setUsergroups(array $usergroups): void
+    {
+        $this->usergroups = $usergroups;
+    }
+
 
 }
