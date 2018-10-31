@@ -26,8 +26,11 @@ class CopyPageTree extends AbstractStep implements SiteCreationInterface
 
     public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
     {
-        $newId = $this->duplicateCommandService->duplicate('pages', $configuration->getSourceRootPageId());
-//        $newId = 65;
+        $sourcePageId = $configuration->getSourceRootPageId();
+        if ($sourcePageId === 0) {
+            throw new \RuntimeException('No source root page has been defined!', 1541019057);
+        }
+        $newId = $this->duplicateCommandService->duplicate('pages', $sourcePageId);
         $response->setTargetRootPageId($newId);
     }
 
