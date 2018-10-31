@@ -78,4 +78,14 @@ class ConfigurationTest extends UnitTestCase
         $this->assertEquals($value, $this->subject->getUsers());
     }
 
+    /**
+     * @test
+     */
+    public function additionalInformationCanBeTest(): void
+    {
+        $value = ['key' => ['abc' => 123]];
+        $this->subject->setAdditionalInformation($value);
+        $this->assertEquals($value, $this->subject->getAdditionalInformation());
+    }
+
 }

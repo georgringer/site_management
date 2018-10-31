@@ -24,6 +24,9 @@ class Configuration
     /** @var User[] */
     protected $users = [];
 
+    /** @var array */
+    protected $additionalInformation = [];
+
     /**
      * @return int
      */
@@ -119,6 +122,22 @@ class Configuration
     public function setUsers(array $users): void
     {
         $this->users = $users;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdditionalInformation(): array
+    {
+        return $this->additionalInformation;
+    }
+
+    /**
+     * @param array $additionalInformation
+     */
+    public function setAdditionalInformation(array $additionalInformation): void
+    {
+        $this->additionalInformation = $additionalInformation;
     }
 
 }

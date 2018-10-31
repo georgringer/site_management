@@ -1,0 +1,4 @@
+The following site has been just created
+-----------------------------------------
+
+Identifier: {configuration.identifier}

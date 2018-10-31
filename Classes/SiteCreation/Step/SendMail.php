@@ -7,6 +7,7 @@ use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Response;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3Fluid\Fluid\View\TemplateView;
 
 class SendMail extends AbstractStep implements SiteCreationInterface
 {
@@ -25,10 +26,18 @@ class SendMail extends AbstractStep implements SiteCreationInterface
 
     public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
     {
-        $this->mailMessage->addTo('georg.ringer@gmail.com');
-        $this->mailMessage->addFrom('noreply@fo.com', 'Site Management');
-        $this->mailMessage->setSubject('Site created');
-        $this->mailMessage->addPart('Site has been created', 'text/plain');
+        $view = new TemplateView();
+        $view->getTemplatePaths()->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($stepConfiguration['plainContent']));
+        $view->assignMultiple([
+            'configuration' => $configuration,
+            'response' => $response,
+            'stepConfiguration' => $stepConfiguration
+        ]);
+
+        $this->mailMessage->addTo($stepConfiguration['to']);
+        $this->mailMessage->addFrom($stepConfiguration['fromEmail'], $stepConfiguration['fromName']);
+        $this->mailMessage->setSubject($stepConfiguration['subject']);
+        $this->mailMessage->addPart($view->render(), 'text/plain');
         $this->mailMessage->send();
     }
 

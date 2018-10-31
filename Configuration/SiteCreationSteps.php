@@ -4,7 +4,6 @@ return [
     'site_management' => [
         'typo3/ext-site_management/copy-pagetree' => [
             'target' => \GeorgRinger\SiteManagement\SiteCreation\Step\CopyPageTree::class,
-            'options' => []
         ],
         'typo3/ext-site_management/create-site-configuration' => [
             'target' => \GeorgRinger\SiteManagement\SiteCreation\Step\CreateSiteConfiguration::class,
@@ -40,6 +39,13 @@ return [
             'target' => \GeorgRinger\SiteManagement\SiteCreation\Step\SendMail::class,
             'after' => [
                 'typo3/ext-site_management/create-users',
+            ],
+            'options' => [
+                'to' => 'owner@youremail.com',
+                'fromName' => 'Website',
+                'fromEmail' => 'noreply@website.com',
+                'subject' => 'New site has been created',
+                'plainContent' => 'EXT:site_management/Resources/Private/Templates/Email/SendMail.txt',
             ]
         ],
     ]
