@@ -6,11 +6,13 @@
 <f:if condition="{demoSite}">
     <f:then>
         <p class="lead">Create new sites based on demo tree <strong>{demoSite.title}</strong>.</p>
-        <div class="row">
-            <div class="col-xs-8">
-                <f:form>
-                    <f:form.hidden name="action" value="create"/>
-                    <f:form.hidden name="base" value="{demoSite.uid}"/>
+
+        <f:form>
+            <f:form.hidden name="action" value="create"/>
+            <f:form.hidden name="base" value="{demoSite.uid}"/>
+            <div class="row">
+                <div class="col-xs-5">
+
                     <div class="form-group">
                         <label>Languages</label>
 
@@ -32,10 +34,17 @@
                     <div class="form-group">
                         <label for="domain">Domain</label>
                         <input required name="domain" id="domain" class="form-control"
-                               placeholder="the-new-domain.com/"/>
+                               placeholder="the-new-domain.com"/>
                     </div>
+                </div>
+                <div class="col-xs-7">
                     <div class="form-group">
                         <label>Users</label>
+                        <div>
+                            <small class="form-text text-muted">
+                                Syntax for new users is: <code>username|name|email</code>. One user per line
+                            </small>
+                        </div>
                         <table class="table table-condensed table-hover table-striped">
                             <thead>
                             <tr>
@@ -61,17 +70,12 @@
                         </table>
 
                     </div>
-                    <div class="form-group">
-                        <input type="submit" class="btn btn-primary" value="Create"/>
-                    </div>
-
-                </f:form>
+                </div>
             </div>
-            <div class="col-xs-4">
-                <h5>Some description</h5>
-                <hr>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Create"/>
             </div>
-        </div>
+        </f:form>
     </f:then>
     <f:else>
 
