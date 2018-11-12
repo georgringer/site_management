@@ -54,4 +54,25 @@ class SendMailTest extends BaseTestCase
 
         $subject->handle($configuration, $response, $stepConfiguration);
     }
+
+    /**
+     * @test
+     */
+    public function titleIsReturned(): void
+    {
+        $subject = $this->getAccessibleMock(SendMail::class, ['duplicate'], [], '', false);
+
+        $this->assertNotEmpty($subject->getTitle());
+    }
+
+    /**
+     * @test
+     */
+    public function mailMessageIsSet():void
+    {
+        $subject = $this->getAccessibleMock(SendMail::class, ['duplicate'], [], '', true);
+
+        $this->assertNotNull($subject->_get('mailMessage'));
+
+    }
 }

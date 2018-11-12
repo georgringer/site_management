@@ -44,4 +44,16 @@ class UserTest extends UnitTestCase
         new User($string);
     }
 
+
+    /**
+     * @test
+     */
+    public function passwordCanBeTest(): void
+    {
+        $subject = new User('johndoe|John Doe|john@example.com');
+        $value = 'joh316';
+        $subject->setPassword($value);
+        $this->assertEquals($value, $subject->getPassword());
+    }
+
 }

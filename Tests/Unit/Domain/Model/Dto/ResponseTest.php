@@ -38,4 +38,25 @@ class ResponseTest extends UnitTestCase
         $this->assertEquals($value, $this->subject->getUsers());
     }
 
+
+    /**
+     * @test
+     */
+    public function sysFileMountsCanBeTest(): void
+    {
+        $value = [12, 35];
+        $this->subject->setSysFileMounts($value);
+        $this->assertEquals($value, $this->subject->getSysFileMounts());
+    }
+
+    /**
+     * @test
+     */
+    public function usergroupsCanBeTest(): void
+    {
+        $value = [45, 67];
+        $this->subject->setUsergroups($value);
+        $this->assertEquals($value, $this->subject->getUsergroups());
+    }
+
 }

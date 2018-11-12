@@ -13,6 +13,11 @@ class CopyPageTreeTest extends BaseTestCase
 {
 
     /**
+     * @var bool Reset singletons created by subject
+     */
+    protected $resetSingletonInstances = true;
+
+    /**
      * @test
      */
     public function dataHandlerIsInvoked()
@@ -25,9 +30,36 @@ class CopyPageTreeTest extends BaseTestCase
         $subject->_set('duplicateCommandService', $dateHandlerProphecy->reveal());
 
         $configuration = new Configuration();
+        $configuration->setSourceRootPageId(123);
         $response = new Response();
         $subject->handle($configuration, $response, []);
 
         $this->assertEquals(1337, $response->getTargetRootPageId());
     }
+
+    /**
+     * @test
+     */
+    public function exceptionIsThrownForMissingSourceUid()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionCode(1541019057);
+
+        $subject = $this->getAccessibleMock(CopyPageTree::class, ['duplicate'], [], '', false);
+
+        $configuration = new Configuration();
+        $response = new Response();
+        $subject->handle($configuration, $response);
+    }
+
+    /**
+     * @test
+     */
+    public function titleIsReturned(): void
+    {
+        $subject = $this->getAccessibleMock(CopyPageTree::class, ['duplicate'], [], '', false);
+
+        $this->assertNotEmpty($subject->getTitle());
+    }
+
 }

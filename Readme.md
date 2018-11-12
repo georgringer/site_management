@@ -29,5 +29,6 @@ UnitTests can be called with the following command:
 
 ```
 ./phpunit -c ./vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml web/typo3conf/ext/site_management/Tests
+../../../../phpunit -c ./Build/phpunit.xml --coverage-text --coverage-html=./report
 ```
 
