@@ -70,6 +70,8 @@ class SiteManagementController
     /**
      * List pages that have 'is_siteroot' flag set - those that have the globe icon in page tree.
      * Link to Add / Edit / Delete for each.
+     *
+     * @param ServerRequestInterface $request
      */
     protected function overviewAction(ServerRequestInterface $request): void
     {
@@ -80,6 +82,10 @@ class SiteManagementController
         ]);
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @throws SiteNotFoundException
+     */
     protected function demoSiteSelectionAction(ServerRequestInterface $request): void
     {
         $selectedDemoSite = $request->getQueryParams()['site'];
@@ -97,6 +103,12 @@ class SiteManagementController
         ]);
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @return RedirectResponse
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     * @throws \TYPO3\CMS\Core\Exception
+     */
     protected function createAction(ServerRequestInterface $request)
     {
         try {

@@ -37,6 +37,8 @@ class CreateSiteConfiguration extends AbstractStep implements SiteCreationInterf
 
     /**
      * @param Configuration $configuration
+     * @param Response $response
+     * @param array $stepConfiguration
      * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
      * @throws \TYPO3\CMS\Core\Exception\SiteNotFoundException
      */
@@ -70,7 +72,7 @@ class CreateSiteConfiguration extends AbstractStep implements SiteCreationInterf
     /**
      * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
      */
-    protected function clearCaches()
+    protected function clearCaches(): void
     {
         $this->getCache()->remove('pseudo-sites');
         $this->getCache()->remove('legacy-domains');

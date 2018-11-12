@@ -32,6 +32,7 @@ return [
         'typo3/ext-site_management/create-users' => [
             'target' => \GeorgRinger\SiteManagement\SiteCreation\Step\CreateUsers::class,
             'after' => [
+                'typo3/ext-site_management/create-sysfilemounts',
                 'typo3/ext-site_management/create-usergroups',
             ]
         ],

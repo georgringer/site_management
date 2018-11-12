@@ -21,6 +21,10 @@ class CreateUsers extends AbstractStep implements SiteCreationInterface
     /** @var PasswordHashInterface */
     protected $passwordHashInstance;
 
+    /**
+     * CreateUsers constructor.
+     * @throws \TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException
+     */
     public function __construct()
     {
         $this->duplicateCommand = GeneralUtility::makeInstance(DuplicateCommand::class);

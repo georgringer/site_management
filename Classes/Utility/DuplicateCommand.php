@@ -31,8 +31,6 @@ class DuplicateCommand
         $this->dataHandler->start([], $duplicateCmd);
         $this->dataHandler->process_cmdmap();
 
-//        print_r($this->dataHandler->cop);
-
         $duplicateMappingArray = $this->dataHandler->copyMappingArray;
         $duplicateUid = $duplicateMappingArray[$table][$sourcePageId];
 

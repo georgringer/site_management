@@ -76,7 +76,7 @@ class CreateSysFileMounts extends AbstractStep implements SiteCreationInterface
             ->select('*')
             ->from(self::TABLE)
             ->where(
-                $queryBuilder->expr()->eq('base', $storage, \PDO::PARAM_INT),
+                $queryBuilder->expr()->eq('base', $queryBuilder->createNamedParameter($storage, \PDO::PARAM_INT)),
                 $queryBuilder->expr()->eq('path', $queryBuilder->createNamedParameter($identifier, \PDO::PARAM_STR))
             )
             ->execute()
