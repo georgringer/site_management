@@ -9,7 +9,7 @@ use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\View\TemplateView;
 
-class SendMail extends AbstractStep implements SiteCreationInterface
+class SendMail extends AbstractStep
 {
     /** @var MailMessage */
     protected $mailMessage;

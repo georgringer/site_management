@@ -40,14 +40,14 @@ class CreateSysFileMounts extends AbstractStep implements SiteCreationInterface
         if ($fileMounts) {
             $newFileMountIds = [];
             foreach ($fileMounts as $fileMount) {
-                $newFileMountId = $this->duplicateFileMount($fileMount, $configuration);
+                $newFileMountId = $this->duplicateFileMount($fileMount, $configuration, $response);
                 $newFileMountIds[] = $newFileMountId;
             }
             $response->setSysFileMounts($newFileMountIds);
         }
     }
 
-    protected function duplicateFileMount(array $row, Configuration $configuration): int
+    protected function duplicateFileMount(array $row, Configuration $configuration, Response $response): int
     {
         $newFileMountId = 0;
         $identifier = $row['base'] . ':' . $row['path'];
@@ -63,13 +63,13 @@ class CreateSysFileMounts extends AbstractStep implements SiteCreationInterface
                 $newFolder = $parentDirectory->getSubfolder($newFolderName);
             }
 
-            $newFileMountId = $this->getFileMount($row['base'], $newFolder->getIdentifier(), $row['uid'], $configuration);
+            $newFileMountId = $this->getFileMount($row['base'], $newFolder->getIdentifier(), $row['uid'], $configuration, $response);
         }
 
         return $newFileMountId;
     }
 
-    protected function getFileMount(int $storage, string $identifier, int $sourceId, Configuration $configuration)
+    protected function getFileMount(int $storage, string $identifier, int $sourceId, Configuration $configuration, Response $response)
     {
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable(self::TABLE);
         $row = $queryBuilder
@@ -98,7 +98,7 @@ class CreateSysFileMounts extends AbstractStep implements SiteCreationInterface
                 [
                     'title' => VariableReplacer::replace($currentPageTitle, $configuration),
                     'path' => $identifier,
-                    'tx_site_management_site' => 0,
+                    'tx_site_management_site' => $response->getTargetRootPageId(),
                     'tx_site_management_based_on' => $sourceId,
                 ],
                 [

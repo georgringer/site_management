@@ -36,6 +36,12 @@ return [
                 'typo3/ext-site_management/create-usergroups',
             ]
         ],
+        'typo3/ext-site_management/replace-relations' => [
+            'target' => \GeorgRinger\SiteManagement\SiteCreation\Step\CreateUsers::class,
+            'after' => [
+                'typo3/ext-site_management/create-users',
+            ]
+        ],
         'typo3/ext-site_management/send-mail' => [
             'target' => \GeorgRinger\SiteManagement\SiteCreation\Step\SendMail::class,
             'after' => [

@@ -7,9 +7,12 @@ use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Response;
 use GeorgRinger\SiteManagement\Domain\Model\Dto\User;
 use GeorgRinger\SiteManagement\Utility\DuplicateCommand;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashFactory;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashInterface;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CreateUsers extends AbstractStep implements SiteCreationInterface
@@ -43,21 +46,23 @@ class CreateUsers extends AbstractStep implements SiteCreationInterface
             foreach ($users as $sourceRecordId => $userGroup) {
                 foreach ($userGroup as $user) {
 
-                    $this->duplicateSingleUser($sourceRecordId, $user);
+                    $this->duplicateSingleUser($sourceRecordId, $user, $response);
                 }
             }
             $response->setUsers($users);
         }
     }
 
-    protected function duplicateSingleUser(int $templateRecordId, User $user)
+    protected function duplicateSingleUser(int $sourceRecordId, User $user, Response $response)
     {
+        $targetRootPageId = $response->getTargetRootPageId();
         $newPassword = $this->generatePassword();
         $user->setPassword($newPassword);
-        $newId = $this->duplicateCommand->duplicate('be_users', $templateRecordId);
+
+        $newId = $this->duplicateCommand->duplicate('be_users', $sourceRecordId);
+
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getConnectionForTable('be_users');
-
         $connection->update(
             'be_users',
             [
@@ -65,8 +70,8 @@ class CreateUsers extends AbstractStep implements SiteCreationInterface
                 'email' => $user->getEmail(),
                 'realName' => $user->getName(),
                 'password' => $this->passwordHashInstance->getHashedPassword($newPassword),
-                'tx_site_management_site' => 0,
-                'tx_site_management_based_on' => $templateRecordId
+                'tx_site_management_site' => $targetRootPageId,
+                'tx_site_management_based_on' => $sourceRecordId
             ],
             [
                 'uid' => $newId

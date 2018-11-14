@@ -3,11 +3,17 @@ declare(strict_types=1);
 
 namespace GeorgRinger\SiteManagement\SiteCreation\Step;
 
-abstract class AbstractStep
+use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
+use GeorgRinger\SiteManagement\Domain\Model\Dto\Response;
+
+abstract class AbstractStep implements SiteCreationInterface
 {
 //
-//    /** @var Configuration */
-//    protected $configuration;
+    /** @var Configuration */
+    protected $configuration;
+
+    /** @var Response */
+    protected $response;
 //
 //    /**
 //     * AbstractStep constructor.
@@ -17,6 +23,12 @@ abstract class AbstractStep
 //    {
 //        $this->configuration = $configuration;
 //    }
+
+    public function setup(Configuration $configuration, Response $response)
+    {
+        $this->configuration = $configuration;
+        $this->response = $response;
+    }
 
 
     public function isValid(): bool

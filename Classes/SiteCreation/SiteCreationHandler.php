@@ -5,6 +5,7 @@ namespace GeorgRinger\SiteManagement\SiteCreation;
 
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Response;
+use GeorgRinger\SiteManagement\SiteCreation\Step\AbstractStep;
 use GeorgRinger\SiteManagement\SiteCreation\Step\SiteCreationInterface;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Service\DependencyOrderingService;
@@ -41,8 +42,10 @@ class SiteCreationHandler
         $allSteps = $this->sanitizeSteps($allConfiguredSteps);
 
         foreach ($allSteps as $name => $stepConfiguration) {
-            /** @var SiteCreationInterface $step */
+            /** @var AbstractStep $step */
             $step = GeneralUtility::makeInstance($stepConfiguration['target']);
+            $step->setup($this->configuration, $response);
+
             if ($step->isValid()) {
                 $options = $stepConfiguration['options'] ?? [];
                 $step->handle($this->configuration, $response, $options);

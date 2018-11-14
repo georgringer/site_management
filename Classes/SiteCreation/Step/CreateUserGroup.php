@@ -54,9 +54,7 @@ class CreateUserGroup extends AbstractStep implements SiteCreationInterface
             self::TABLE,
             [
                 'title' => VariableReplacer::replace($title, $configuration),
-                'db_mountpoints' => $response->getTargetRootPageId(),
-                'file_mountpoints' => implode(',', $response->getSysFileMounts()),
-                'tx_site_management_site' => 0,
+                'tx_site_management_site' => $response->getTargetRootPageId(),
                 'tx_site_management_based_on' => $usergroup['uid']
             ],
             [
