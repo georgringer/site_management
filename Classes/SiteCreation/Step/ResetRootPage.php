@@ -17,18 +17,18 @@ class ResetRootPage extends AbstractStep implements SiteCreationInterface
         return 'Reset root page';
     }
 
-    public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
+    public function handle(array $stepConfiguration = []): void
     {
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getConnectionForTable('pages');
 
-        $originalRow = BackendUtility::getRecord('pages', $response->getTargetRootPageId());
+        $originalRow = BackendUtility::getRecord('pages', $this->response->getTargetRootPageId());
         $currentPageTitle = trim(str_replace('(copy 1)', '', $originalRow['title']));
 
         $connection->update(
             'pages',
             [
-                'title' => VariableReplacer::replace($currentPageTitle, $configuration),
+                'title' => VariableReplacer::replace($currentPageTitle, $this->configuration),
                 'rowDescription' => '',
                 'tx_site_management_demo_tree' => 0,
                 'hidden' => 1,

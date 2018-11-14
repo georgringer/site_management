@@ -42,26 +42,26 @@ class CreateSiteConfiguration extends AbstractStep implements SiteCreationInterf
      * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
      * @throws \TYPO3\CMS\Core\Exception\SiteNotFoundException
      */
-    public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
+    public function handle(array $stepConfiguration = []): void
     {
 //        return;
-        $currentSite = $this->siteFinder->getSiteByRootPageId($configuration->getSourceRootPageId());
+        $currentSite = $this->siteFinder->getSiteByRootPageId($this->configuration->getSourceRootPageId());
         $currentSiteConfiguration = $currentSite->getConfiguration();
 
-        $targetConfiguration = $this->mergeConfigurationIntoSiteConfiguration($currentSiteConfiguration, $response, $configuration);
+        $targetConfiguration = $this->mergeConfigurationIntoSiteConfiguration($currentSiteConfiguration);
 
         // Persist the configuration
         $this->siteConfigurationManager->write($configuration->getIdentifier(), $targetConfiguration);
         $this->clearCaches();
     }
 
-    protected function mergeConfigurationIntoSiteConfiguration(array $sourceConfiguration, Response $response, Configuration $configuration)
+    protected function mergeConfigurationIntoSiteConfiguration(array $sourceConfiguration)
     {
-        $sourceConfiguration['rootPageId'] = $response->getTargetRootPageId();
-        $sourceConfiguration['base'] = $configuration->getDomain();
+        $sourceConfiguration['rootPageId'] = $this->response->getTargetRootPageId();
+        $sourceConfiguration['base'] = $this->configuration->getDomain();
 
         foreach ($sourceConfiguration['languages'] as $key => $language) {
-            if (!\in_array($language['languageId'], $configuration->getLanguages())) {
+            if (!\in_array($language['languageId'], $this->configuration->getLanguages())) {
                 unset($sourceConfiguration['languages'][$key]);
             }
         }

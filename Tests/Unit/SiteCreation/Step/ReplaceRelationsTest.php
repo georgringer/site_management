@@ -32,7 +32,8 @@ class ReplaceRelationsTest extends BaseTestCase
         $configuration->setSourceRootPageId(983);
         $response = new Response();
         $response->setTargetRootPageId('456');
-        $this->assertEquals('123,456,789', $subject->_call('replaceDbMountPoint', '123,983,789', $configuration, $response));
+        $subject->setup($configuration, $response);
+        $this->assertEquals('123,456,789', $subject->_call('replaceDbMountPoint', '123,983,789'));
     }
 
     /**

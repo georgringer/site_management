@@ -51,8 +51,8 @@ class SendMailTest extends BaseTestCase
         $mailMessageProphecy->send(Argument::cetera())->shouldBeCalled();
 
         $subject->_set('mailMessage', $mailMessageProphecy->reveal());
-
-        $subject->handle($configuration, $response, $stepConfiguration);
+        $subject->setup($configuration, $response);
+        $subject->handle($stepConfiguration);
     }
 
     /**

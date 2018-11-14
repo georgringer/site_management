@@ -32,7 +32,8 @@ class CopyPageTreeTest extends BaseTestCase
         $configuration = new Configuration();
         $configuration->setSourceRootPageId(123);
         $response = new Response();
-        $subject->handle($configuration, $response, []);
+        $subject->setup($configuration, $response);
+        $subject->handle([]);
 
         $this->assertEquals(1337, $response->getTargetRootPageId());
     }
@@ -46,10 +47,10 @@ class CopyPageTreeTest extends BaseTestCase
         $this->expectExceptionCode(1541019057);
 
         $subject = $this->getAccessibleMock(CopyPageTree::class, ['duplicate'], [], '', false);
-
         $configuration = new Configuration();
         $response = new Response();
-        $subject->handle($configuration, $response);
+        $subject->setup($configuration, $response);
+        $subject->handle();
     }
 
     /**

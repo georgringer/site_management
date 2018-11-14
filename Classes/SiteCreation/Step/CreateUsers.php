@@ -3,16 +3,11 @@ declare(strict_types=1);
 
 namespace GeorgRinger\SiteManagement\SiteCreation\Step;
 
-use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
-use GeorgRinger\SiteManagement\Domain\Model\Dto\Response;
 use GeorgRinger\SiteManagement\Domain\Model\Dto\User;
 use GeorgRinger\SiteManagement\Utility\DuplicateCommand;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashFactory;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashInterface;
-use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CreateUsers extends AbstractStep implements SiteCreationInterface
@@ -39,23 +34,23 @@ class CreateUsers extends AbstractStep implements SiteCreationInterface
         return 'Create users';
     }
 
-    public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
+    public function handle(array $stepConfiguration = []): void
     {
-        $users = $configuration->getUsers();
+        $users = $this->configuration->getUsers();
         if (!empty($users)) {
             foreach ($users as $sourceRecordId => $userGroup) {
                 foreach ($userGroup as $user) {
 
-                    $this->duplicateSingleUser($sourceRecordId, $user, $response);
+                    $this->duplicateSingleUser($sourceRecordId, $user);
                 }
             }
-            $response->setUsers($users);
+            $this->response->setUsers($users);
         }
     }
 
-    protected function duplicateSingleUser(int $sourceRecordId, User $user, Response $response)
+    protected function duplicateSingleUser(int $sourceRecordId, User $user)
     {
-        $targetRootPageId = $response->getTargetRootPageId();
+        $targetRootPageId = $this->response->getTargetRootPageId();
         $newPassword = $this->generatePassword();
         $user->setPassword($newPassword);
 

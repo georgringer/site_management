@@ -6,7 +6,6 @@ namespace GeorgRinger\SiteManagement\SiteCreation;
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
 use GeorgRinger\SiteManagement\Domain\Model\Dto\Response;
 use GeorgRinger\SiteManagement\SiteCreation\Step\AbstractStep;
-use GeorgRinger\SiteManagement\SiteCreation\Step\SiteCreationInterface;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Service\DependencyOrderingService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -48,7 +47,7 @@ class SiteCreationHandler
 
             if ($step->isValid()) {
                 $options = $stepConfiguration['options'] ?? [];
-                $step->handle($this->configuration, $response, $options);
+                $step->handle($options);
             }
         }
 
@@ -68,7 +67,7 @@ class SiteCreationHandler
             $packageConfiguration = $package->getPackagePath() . 'Configuration/SiteCreationSteps.php';
             if (file_exists($packageConfiguration)) {
                 $stepConfiguration = require $packageConfiguration;
-                if (is_array($stepConfiguration)) {
+                if (\is_array($stepConfiguration)) {
                     $allSteps[] = $stepConfiguration;
                 }
             }

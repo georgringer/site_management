@@ -14,6 +14,6 @@ interface SiteCreationInterface
     public function isValid(): bool;
 
 
-    public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void;
+    public function handle(array $stepConfiguration = []): void;
 
 }

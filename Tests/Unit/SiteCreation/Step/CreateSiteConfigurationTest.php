@@ -45,6 +45,8 @@ class CreateSiteConfigurationTest extends BaseTestCase
         $configuration->setLanguages([0, 2]);
         $configuration->setDomain('new.vm');
 
+        $subject->setup($configuration, $response);
+
         $targetConfiguration = [
             'fo' => 123,
             'rootPageId' => 2,
@@ -55,7 +57,7 @@ class CreateSiteConfigurationTest extends BaseTestCase
             ]
         ];
 
-        $newConfiguration = $subject->_call('mergeConfigurationIntoSiteConfiguration', $sourceConfiguration, $response, $configuration);
+        $newConfiguration = $subject->_call('mergeConfigurationIntoSiteConfiguration', $sourceConfiguration);
         $this->assertEquals($targetConfiguration, $newConfiguration);
     }
 }

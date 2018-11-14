@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace GeorgRinger\SiteManagement\SiteCreation\Step;
 
-use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
-use GeorgRinger\SiteManagement\Domain\Model\Dto\Response;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -29,31 +27,31 @@ class ReplaceRelations extends AbstractStep
         return 'Replace relations';
     }
 
-    public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
+    public function handle(array $stepConfiguration = []): void
     {
         foreach (self::$stepConfiguration as $tableName => $fields) {
-            $rows = $this->getRows($tableName, $response->getTargetRootPageId());
+            $rows = $this->getRows($tableName, $this->response->getTargetRootPageId());
 
             foreach ($rows as $row) {
-                $this->handleSingleRow($configuration, $response, $fields, $tableName, $row);
+                $this->handleSingleRow($fields, $tableName, $row);
             }
         }
     }
 
-    protected function handleSingleRow(Configuration $configuration, Response $response, array $fieldList, string $tableName, array $row)
+    protected function handleSingleRow(array $fieldList, string $tableName, array $row)
     {
         $originalRow = $row;
         foreach ($fieldList as $field) {
             switch ($field) {
                 case 'db_mountpoints':
-                    $row[$field] = $this->replaceDbMountPoint($row[$field], $configuration, $response);
+                    $row[$field] = $this->replaceDbMountPoint($row[$field]);
                     break;
                 case 'file_mountpoints':
-                    $row[$field] = $this->getUpdatedIdList('sys_filemounts', $row[$field], $response->getTargetRootPageId());
+                    $row[$field] = $this->getUpdatedIdList('sys_filemounts', $row[$field], $this->response->getTargetRootPageId());
                     break;
                 case 'usergroup':
                 case 'subgroup':
-                    $row[$field] = $this->getUpdatedIdList('be_groups', $row[$field], $response->getTargetRootPageId());
+                    $row[$field] = $this->getUpdatedIdList('be_groups', $row[$field], $this->response->getTargetRootPageId());
                     break;
 
             }
@@ -73,9 +71,9 @@ class ReplaceRelations extends AbstractStep
 
     }
 
-    protected function replaceDbMountPoint(string $currentValue, Configuration $configuration, Response $response): string
+    protected function replaceDbMountPoint(string $currentValue): string
     {
-        return $this->replaceValueInList($currentValue, $configuration->getSourceRootPageId(), $response->getTargetRootPageId());
+        return $this->replaceValueInList($currentValue, $this->configuration->getSourceRootPageId(), $this->response->getTargetRootPageId());
     }
 
     protected function replaceValueInList(string $list, int $search, int $replace): string

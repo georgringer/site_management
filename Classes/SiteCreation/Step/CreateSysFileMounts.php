@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace GeorgRinger\SiteManagement\SiteCreation\Step;
 
-use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
-use GeorgRinger\SiteManagement\Domain\Model\Dto\Response;
 use GeorgRinger\SiteManagement\Utility\DuplicateCommand;
 use GeorgRinger\SiteManagement\Utility\VariableReplacer;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
@@ -33,21 +31,21 @@ class CreateSysFileMounts extends AbstractStep implements SiteCreationInterface
         return 'Create sys_filemounts';
     }
 
-    public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
+    public function handle(array $stepConfiguration = []): void
     {
-        $fileMounts = $this->getAllFileMountsOfSourceSite($configuration->getSourceRootPageId());
+        $fileMounts = $this->getAllFileMountsOfSourceSite($this->configuration->getSourceRootPageId());
 
         if ($fileMounts) {
             $newFileMountIds = [];
             foreach ($fileMounts as $fileMount) {
-                $newFileMountId = $this->duplicateFileMount($fileMount, $configuration, $response);
+                $newFileMountId = $this->duplicateFileMount($fileMount);
                 $newFileMountIds[] = $newFileMountId;
             }
             $response->setSysFileMounts($newFileMountIds);
         }
     }
 
-    protected function duplicateFileMount(array $row, Configuration $configuration, Response $response): int
+    protected function duplicateFileMount(array $row): int
     {
         $newFileMountId = 0;
         $identifier = $row['base'] . ':' . $row['path'];
@@ -55,7 +53,7 @@ class CreateSysFileMounts extends AbstractStep implements SiteCreationInterface
         if ($sourceMount) {
             $parentDirectory = $sourceMount->getParentFolder();
 
-            $newFolderName = $configuration->getIdentifier();
+            $newFolderName = $this->configuration->getIdentifier();
 
             if (!$parentDirectory->hasFolder($newFolderName)) {
                 $newFolder = $parentDirectory->createFolder($newFolderName);
@@ -63,13 +61,13 @@ class CreateSysFileMounts extends AbstractStep implements SiteCreationInterface
                 $newFolder = $parentDirectory->getSubfolder($newFolderName);
             }
 
-            $newFileMountId = $this->getFileMount($row['base'], $newFolder->getIdentifier(), $row['uid'], $configuration, $response);
+            $newFileMountId = $this->getFileMount($row['base'], $newFolder->getIdentifier(), $row['uid']);
         }
 
         return $newFileMountId;
     }
 
-    protected function getFileMount(int $storage, string $identifier, int $sourceId, Configuration $configuration, Response $response)
+    protected function getFileMount(int $storage, string $identifier, int $sourceId)
     {
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable(self::TABLE);
         $row = $queryBuilder
@@ -96,9 +94,9 @@ class CreateSysFileMounts extends AbstractStep implements SiteCreationInterface
             $connection->update(
                 self::TABLE,
                 [
-                    'title' => VariableReplacer::replace($currentPageTitle, $configuration),
+                    'title' => VariableReplacer::replace($currentPageTitle, $this->configuration),
                     'path' => $identifier,
-                    'tx_site_management_site' => $response->getTargetRootPageId(),
+                    'tx_site_management_site' => $this->response->getTargetRootPageId(),
                     'tx_site_management_based_on' => $sourceId,
                 ],
                 [

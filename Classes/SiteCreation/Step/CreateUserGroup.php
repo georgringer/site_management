@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace GeorgRinger\SiteManagement\SiteCreation\Step;
 
-use GeorgRinger\SiteManagement\Domain\Model\Dto\Configuration;
-use GeorgRinger\SiteManagement\Domain\Model\Dto\Response;
 use GeorgRinger\SiteManagement\Utility\DuplicateCommand;
 use GeorgRinger\SiteManagement\Utility\VariableReplacer;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -28,20 +26,20 @@ class CreateUserGroup extends AbstractStep implements SiteCreationInterface
         return 'Create usergroup';
     }
 
-    public function handle(Configuration $configuration, Response $response, array $stepConfiguration = []): void
+    public function handle(array $stepConfiguration = []): void
     {
-        $userGroups = $this->getAllUsergroupsOfSourceSite($configuration->getSourceRootPageId());
+        $userGroups = $this->getAllUsergroupsOfSourceSite($this->configuration->getSourceRootPageId());
         if ($userGroups) {
             $newIds = [];
             foreach ($userGroups as $usergroup) {
-                $newId = $this->duplicateUsergroup($usergroup, $configuration, $response);
+                $newId = $this->duplicateUsergroup($usergroup);
                 $newIds[] = $newId;
             }
             $response->setUsergroups($newIds);
         }
     }
 
-    protected function duplicateUsergroup(array $usergroup, Configuration $configuration, Response $response)
+    protected function duplicateUsergroup(array $usergroup)
     {
         $targetUid = $this->duplicateService->duplicate(self::TABLE, $usergroup['uid']);
 
@@ -53,8 +51,8 @@ class CreateUserGroup extends AbstractStep implements SiteCreationInterface
         $connection->update(
             self::TABLE,
             [
-                'title' => VariableReplacer::replace($title, $configuration),
-                'tx_site_management_site' => $response->getTargetRootPageId(),
+                'title' => VariableReplacer::replace($title, $this->configuration),
+                'tx_site_management_site' => $this->response->getTargetRootPageId(),
                 'tx_site_management_based_on' => $usergroup['uid']
             ],
             [
