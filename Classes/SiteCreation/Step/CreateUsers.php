@@ -7,7 +7,6 @@ use GeorgRinger\SiteManagement\Domain\Model\Dto\User;
 use GeorgRinger\SiteManagement\Utility\DuplicateCommand;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashFactory;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashInterface;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CreateUsers extends AbstractStep implements SiteCreationInterface
@@ -50,28 +49,20 @@ class CreateUsers extends AbstractStep implements SiteCreationInterface
 
     protected function duplicateSingleUser(int $sourceRecordId, User $user)
     {
-        $targetRootPageId = $this->response->getTargetRootPageId();
         $newPassword = $this->generatePassword();
         $user->setPassword($newPassword);
 
         $newId = $this->duplicateCommand->duplicate('be_users', $sourceRecordId);
 
-        $connection = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getConnectionForTable('be_users');
-        $connection->update(
-            'be_users',
-            [
-                'username' => $user->getUsername(),
-                'email' => $user->getEmail(),
-                'realName' => $user->getName(),
-                'password' => $this->passwordHashInstance->getHashedPassword($newPassword),
-                'tx_site_management_site' => $targetRootPageId,
-                'tx_site_management_based_on' => $sourceRecordId
-            ],
-            [
-                'uid' => $newId
-            ]
-        );
+        $update = [
+            'username' => $user->getUsername(),
+            'email' => $user->getEmail(),
+            'realName' => $user->getName(),
+            'password' => $this->passwordHashInstance->getHashedPassword($newPassword),
+            'tx_site_management_site' => $this->response->getTargetRootPageId(),
+            'tx_site_management_based_on' => $sourceRecordId
+        ];
+        $this->updateRow('be_users', $update, ['uid' => $newId]);
     }
 
     protected function generatePassword(int $length = 12)
