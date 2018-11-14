@@ -36,8 +36,6 @@ class CreateSiteConfiguration extends AbstractStep implements SiteCreationInterf
     }
 
     /**
-     * @param Configuration $configuration
-     * @param Response $response
      * @param array $stepConfiguration
      * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
      * @throws \TYPO3\CMS\Core\Exception\SiteNotFoundException
@@ -51,7 +49,7 @@ class CreateSiteConfiguration extends AbstractStep implements SiteCreationInterf
         $targetConfiguration = $this->mergeConfigurationIntoSiteConfiguration($currentSiteConfiguration);
 
         // Persist the configuration
-        $this->siteConfigurationManager->write($configuration->getIdentifier(), $targetConfiguration);
+        $this->siteConfigurationManager->write($this->configuration->getIdentifier(), $targetConfiguration);
         $this->clearCaches();
     }
 

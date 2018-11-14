@@ -41,7 +41,7 @@ class CreateSysFileMounts extends AbstractStep implements SiteCreationInterface
                 $newFileMountId = $this->duplicateFileMount($fileMount);
                 $newFileMountIds[] = $newFileMountId;
             }
-            $response->setSysFileMounts($newFileMountIds);
+            $this->response->setSysFileMounts($newFileMountIds);
         }
     }
 

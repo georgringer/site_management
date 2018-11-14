@@ -34,7 +34,7 @@ class ResetRootPage extends AbstractStep implements SiteCreationInterface
                 'hidden' => 1,
             ],
             [
-                'uid' => $response->getTargetRootPageId()
+                'uid' => $this->response->getTargetRootPageId()
             ]
         );
     }

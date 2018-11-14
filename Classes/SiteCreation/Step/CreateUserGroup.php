@@ -35,7 +35,7 @@ class CreateUserGroup extends AbstractStep implements SiteCreationInterface
                 $newId = $this->duplicateUsergroup($usergroup);
                 $newIds[] = $newId;
             }
-            $response->setUsergroups($newIds);
+            $this->response->setUsergroups($newIds);
         }
     }
 

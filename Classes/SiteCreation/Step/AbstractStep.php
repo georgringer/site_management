@@ -14,15 +14,6 @@ abstract class AbstractStep implements SiteCreationInterface
 
     /** @var Response */
     protected $response;
-//
-//    /**
-//     * AbstractStep constructor.
-//     * @param Configuration $configuration
-//     */
-//    public function __construct(Configuration $configuration)
-//    {
-//        $this->configuration = $configuration;
-//    }
 
     public function setup(Configuration $configuration, Response $response)
     {
