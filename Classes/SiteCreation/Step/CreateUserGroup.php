@@ -8,7 +8,7 @@ use GeorgRinger\SiteManagement\Utility\VariableReplacer;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class CreateUserGroup extends AbstractStep implements SiteCreationInterface
+class CreateUserGroup extends AbstractStep
 {
 
     protected const TABLE = 'be_groups';

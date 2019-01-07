@@ -6,7 +6,7 @@ namespace GeorgRinger\SiteManagement\SiteCreation\Step;
 use GeorgRinger\SiteManagement\Utility\VariableReplacer;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 
-class ResetRootPage extends AbstractStep implements SiteCreationInterface
+class ResetRootPage extends AbstractStep
 {
     public function getTitle(): string
     {

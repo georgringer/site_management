@@ -12,7 +12,7 @@ use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class CreateSiteConfiguration extends AbstractStep implements SiteCreationInterface
+class CreateSiteConfiguration extends AbstractStep
 {
 
     /** @var SiteFinder */

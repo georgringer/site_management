@@ -10,7 +10,7 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class CreateSysFileMounts extends AbstractStep implements SiteCreationInterface
+class CreateSysFileMounts extends AbstractStep
 {
     private const TABLE = 'sys_filemounts';
 

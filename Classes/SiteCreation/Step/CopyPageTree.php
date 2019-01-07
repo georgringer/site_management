@@ -6,7 +6,7 @@ namespace GeorgRinger\SiteManagement\SiteCreation\Step;
 use GeorgRinger\SiteManagement\Utility\DuplicateCommand;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class CopyPageTree extends AbstractStep implements SiteCreationInterface
+class CopyPageTree extends AbstractStep
 {
 
     /** @var DuplicateCommand */

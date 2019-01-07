@@ -9,7 +9,7 @@ use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashFactory;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class CreateUsers extends AbstractStep implements SiteCreationInterface
+class CreateUsers extends AbstractStep
 {
 
     /** @var DuplicateCommand */
