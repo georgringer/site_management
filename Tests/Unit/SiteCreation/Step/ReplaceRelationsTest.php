@@ -56,6 +56,7 @@ class ReplaceRelationsTest extends BaseTestCase
             'empty list' => ['', 123, 456, ''],
             'list with value on start' => ['123,456,7,8', 123, 12, '12,456,7,8'],
             'list with value in middle' => ['0,123,456,7,8', 7, 10, '0,123,456,10,8'],
+            'list with value in end' => ['0,123,456,7,8', 8, 10, '0,123,456,7,10'],
         ];
     }
 

@@ -29,6 +29,6 @@ class VariableReplacer
 
         fclose($temp);
 
-        return $result;
+        return (string)$result;
     }
 }
