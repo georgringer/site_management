@@ -13,7 +13,7 @@ call_user_func(
                         ['', '']
                     ],
                     'foreign_table' => 'pages',
-                    'foreign_table_where' => 'tx_site_management_demo_tree=1',
+                    'foreign_table_where' => 'is_siteroot=1',
                 ],
             ],
             'tx_site_management_based_on' => [
