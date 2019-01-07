@@ -19,7 +19,11 @@ call_user_func(
             'tx_site_management_based_on' => [
                 'label' => 'based on',
                 'config' => [
-                    'type' => 'input',
+                    'type' => 'group',
+                    'internal_type' => 'db',
+                    'allowed' => 'pages',
+                    'foreign_table' => 'pages',
+                    'size' => 1,
                     'readOnly' => true,
                 ],
             ]
