@@ -20,6 +20,11 @@ class User
     /** @var string */
     protected $password = '';
 
+    /**
+     * User constructor.
+     *
+     * @param string $input username|name|email
+     */
     public function __construct(string $input)
     {
         $input = trim($input);

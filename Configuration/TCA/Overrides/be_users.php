@@ -21,8 +21,8 @@ call_user_func(
                 'config' => [
                     'type' => 'group',
                     'internal_type' => 'db',
-                    'allowed' => 'pages',
-                    'foreign_table' => 'pages',
+                    'allowed' => $table,
+                    'foreign_table' => $table,
                     'size' => 1,
                     'readOnly' => true,
                 ],

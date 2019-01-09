@@ -71,8 +71,8 @@ class CreateUsers extends AbstractStep
         $possible = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $i = 0;
         while ($i < $length) {
-            $char = substr($possible, mt_rand(0, strlen($possible) - 1), 1);
-            if (!strstr($password, $char)) {
+            $char = $possible[random_int(0, \strlen($possible) - 1)];
+            if (false === strpos($password, $char)) {
                 $password .= $char;
                 $i++;
             }

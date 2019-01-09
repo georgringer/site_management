@@ -1,3 +1,33 @@
-<h1>Site has been created!</h1>
+<h1>A new site has been created!</h1>
+
+<f:if condition="{response.users}">
+    <f:then>
+        <table class="table table-hover table-striped table-condensed">
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Name & Email</th>
+                <th>Based on</th>
+            </tr>
+            </thead>
+            <tbody>
+                <f:for each="{response.users}" as="groupedUsers" key="basedOnId">
+                    <f:for each="{groupedUsers}" as="user">
+                        <tr>
+                            <td>{user.username}</td>
+                            <td><code>{user.password}</code></td>
+                            <td>{user.name} {user.email}</td>
+                            <td>{basedOnId}</td>
+                        </tr>
+                    </f:for>
+                </f:for>
+            </tbody>
+        </table>
+    </f:then>
+    <f:else>
+        <div class="alert alert-warning">No backend users have been provided.</div>
+    </f:else>
+</f:if>
 
 <f:debug inline="1">{response}</f:debug>

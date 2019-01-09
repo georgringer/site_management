@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <!--BE Groups-->
+    <be_groups>
+        <uid>1</uid>
+        <title>Group 1</title>
+        <db_mountpoints>1</db_mountpoints>
+        <file_mountpoints>1,2,3</file_mountpoints>
+        <tx_site_management_site>1</tx_site_management_site>
+    </be_groups>
+    <be_groups>
+        <uid>2</uid>
+        <title>Group 2</title>
+        <db_mountpoints>1</db_mountpoints>
+        <file_mountpoints>2</file_mountpoints>
+        <tx_site_management_site>191</tx_site_management_site>
+    </be_groups>
+    <be_groups>
+        <uid>3</uid>
+        <title>Group 3</title>
+        <db_mountpoints>1</db_mountpoints>
+        <file_mountpoints>2</file_mountpoints>
+    </be_groups>
+    <be_groups>
+        <uid>4</uid>
+        <title>Group 4</title>
+        <db_mountpoints>1</db_mountpoints>
+        <file_mountpoints>2</file_mountpoints>
+        <tx_site_management_site>191</tx_site_management_site>
+        <tx_site_management_based_on>1</tx_site_management_based_on>
+    </be_groups>
+
+    <!--BE Users-->
+    <be_users>
+        <uid>1</uid>
+        <username>User1</username>
+        <usergroup>1</usergroup>
+        <db_mountpoints>1</db_mountpoints>
+        <file_mountpoints>1,2,3</file_mountpoints>
+
+
+    </be_users>
+    <be_users>
+        <uid>2</uid>
+        <username>User2</username>
+        <usergroup>2</usergroup>
+        <db_mountpoints>1</db_mountpoints>
+        <file_mountpoints>2</file_mountpoints>
+        <tx_site_management_site>1</tx_site_management_site>
+    </be_users>
+    <be_users>
+        <uid>3</uid>
+        <username>User3</username>
+        <usergroup>1,7,2</usergroup>
+        <db_mountpoints>1</db_mountpoints>
+        <file_mountpoints>2</file_mountpoints>
+        <tx_site_management_site>191</tx_site_management_site>
+        <tx_site_management_based_on>1</tx_site_management_based_on>
+    </be_users>
+
+    <!-- File mounts-->
+    <sys_filemounts>
+        <uid>1</uid>
+        <title>File mount 1</title>
+        <path>/</path>
+        <tx_site_management_site>191</tx_site_management_site>
+    </sys_filemounts>
+    <sys_filemounts>
+        <uid>2</uid>
+        <title>File mount 2</title>
+        <path>/</path>
+        <tx_site_management_site>191</tx_site_management_site>
+    </sys_filemounts>
+    <sys_filemounts>
+        <uid>3</uid>
+        <title>File mount 3</title>
+        <path>/</path>
+        <tx_site_management_site>1</tx_site_management_site>
+    </sys_filemounts>
+</dataset>

@@ -12,8 +12,8 @@ class ReplaceRelations extends AbstractStep
 
     static private $stepConfiguration = [
         'be_users' => [
-            'db_mountpoints',
             'usergroup',
+            'db_mountpoints',
             'file_mountpoints'
         ],
         'be_groups' => [
@@ -38,20 +38,22 @@ class ReplaceRelations extends AbstractStep
         }
     }
 
-    protected function handleSingleRow(array $fieldList, string $tableName, array $row)
+    protected function handleSingleRow(array $fieldList, string $tableName, array $row): void
     {
         $originalRow = $row;
         foreach ($fieldList as $field) {
+            $fieldValue = (string)$row[$field];
+
             switch ($field) {
                 case 'db_mountpoints':
-                    $row[$field] = $this->replaceDbMountPoint($row[$field]);
+                    $row[$field] = $this->replaceDbMountPoint($fieldValue);
                     break;
                 case 'file_mountpoints':
-                    $row[$field] = $this->getUpdatedIdList('sys_filemounts', $row[$field], $this->response->getTargetRootPageId());
+                    $row[$field] = $this->getUpdatedIdList('sys_filemounts', $fieldValue, $this->response->getTargetRootPageId());
                     break;
                 case 'usergroup':
                 case 'subgroup':
-                    $row[$field] = $this->getUpdatedIdList('be_groups', $row[$field], $this->response->getTargetRootPageId());
+                    $row[$field] = $this->getUpdatedIdList('be_groups', $fieldValue, $this->response->getTargetRootPageId());
                     break;
 
             }
@@ -68,7 +70,33 @@ class ReplaceRelations extends AbstractStep
 
     protected function getUpdatedIdList(string $tableName, string $currentValue, int $targetRootPageId)
     {
+        if (!$currentValue) {
+            return '';
+        }
 
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($tableName);
+        $queryBuilder->getRestrictions()
+            ->removeByType(HiddenRestriction::class);
+
+        $rows = $queryBuilder
+            ->select('*')
+            ->from($tableName)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'tx_site_management_site',
+                    $queryBuilder->createNamedParameter($targetRootPageId, \PDO::PARAM_INT)
+                )
+            )
+            ->execute()
+            ->fetchAll();
+
+        foreach ($rows as $row) {
+            if ($row['tx_site_management_based_on']) {
+                $currentValue = $this->replaceValueInList($currentValue, $row['tx_site_management_based_on'], $row['uid']);
+            }
+        }
+
+        return $currentValue;
     }
 
     protected function replaceDbMountPoint(string $currentValue): string
@@ -113,6 +141,4 @@ class ReplaceRelations extends AbstractStep
 
         return $rows;
     }
-
-
 }

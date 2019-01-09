@@ -37,7 +37,7 @@ return [
             ]
         ],
         'typo3/ext-site_management/replace-relations' => [
-            'target' => \GeorgRinger\SiteManagement\SiteCreation\Step\CreateUsers::class,
+            'target' => \GeorgRinger\SiteManagement\SiteCreation\Step\ReplaceRelations::class,
             'after' => [
                 'typo3/ext-site_management/create-users',
             ]
