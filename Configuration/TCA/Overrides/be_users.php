@@ -5,7 +5,7 @@ call_user_func(
     function ($table) {
         $additionalColumns = [
             'tx_site_management_site' => [
-                'label' => 'Used in site',
+                'label' => 'LLL:EXT:site_management/Resources/Private/Language/locallang.xlf:tx_site_management_site',
                 'config' => [
                     'type' => 'select',
                     'renderType' => 'selectSingle',
@@ -17,7 +17,7 @@ call_user_func(
                 ],
             ],
             'tx_site_management_based_on' => [
-                'label' => 'based on',
+                'label' => 'LLL:EXT:site_management/Resources/Private/Language/locallang.xlf:tx_site_management_based_on',
                 'config' => [
                     'type' => 'group',
                     'internal_type' => 'db',

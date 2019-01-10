@@ -7,14 +7,14 @@ call_user_func(
         $additionalColumns = [
             'tx_site_management_demo_tree' => [
                 'exclude' => true,
-                'label' => 'Is Demo tree',
+                'label' => 'LLL:EXT:site_management/Resources/Private/Language/locallang.xlf:pages.tx_site_management_demo_tree',
                 'config' => [
                     'type' => 'check',
                 ],
             ],
             'tx_site_management_feature' => [
                 'exclude' => true,
-                'label' => 'Feature',
+                'label' => 'LLL:EXT:site_management/Resources/Private/Language/locallang.xlf:pages.tx_site_management_feature',
                 'config' => [
                     'type' => 'select',
                     'renderType' => 'selectSingle',
